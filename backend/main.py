@@ -11,10 +11,13 @@ def read_root():
 
 @app.post("/classify")
 async def classify(file: UploadFile = File(...)):
-    if file.content_type not in ["image/jpg","image/jpeg", "image/png"]:
+    if file.content_type not in ["image/jpg","image/jpeg", "image/png", "application/pdf"]:
         return {"error": "Invalid file type. Only JPEG and PNG files are allowed."}
-    if file.size > MAX_FILE_SIZE:
+
+    content = await file.read()
+    if len(content) > MAX_FILE_SIZE:
         return {"error": "File too large. Maximum size is 5MB."}
+    await file.close()
 
     possible_results = ["Bird", "Drone"]
     return {"message": random.choice(possible_results)}
