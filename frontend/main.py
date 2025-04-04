@@ -13,7 +13,7 @@ selected2 = option_menu(None, ["Home", "Upload", "History", 'Settings'],
 if selected2 == "Home":
     response = requests.get("http://127.0.0.1:8000/")
     if response.status_code == 200:
-        st.write(response.json())
+        st.write(response.text)
     else:
         st.write("Failed to fetch data from the API")
 
