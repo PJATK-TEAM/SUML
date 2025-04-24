@@ -27,6 +27,7 @@ elif selected2 == "Upload":
             st.write(response.json())
         else:
             st.write("Failed to classify the image")
+            st.write(f"Server responded with error: {response.status_code} - {response.text}")
 
 # History
 elif selected2 == "History":

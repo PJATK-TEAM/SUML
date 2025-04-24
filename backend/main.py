@@ -2,8 +2,9 @@ import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-import kagglehub
 from fastapi import FastAPI, File, UploadFile
+from PIL import Image
+import io
 
 app = FastAPI(title="Bird Drone Classifier API", version="1.0.0")
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
@@ -31,10 +32,11 @@ async def classify(file: UploadFile = File(...)):
     return {"prediction": result}
 
 
-def predict_image(img):
-    img = img.resize((120, 120)).convert('RGB')
-    img = np.array(img).astype('float32') / 255.0
-    img = np.expand_dims(img, axis=0)
+def predict_image(img_data):
+    img = Image.open(io.BytesIO(img_data))  # decode raw data as image
+    img = img.resize((120, 120)).convert('RGB')  
+    img = np.array(img).astype('float32') / 255.0  
+    img = np.expand_dims(img, axis=0)  
 
     prediction = model.predict(img)[0]
 
