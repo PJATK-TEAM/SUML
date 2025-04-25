@@ -24,7 +24,7 @@ elif selected2 == "Upload":
         files = {"file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
         response = requests.post("http://127.0.0.1:8000/classify", files=files)
         if response.status_code == 200:
-            st.write(response.json())
+            st.write(response.text)
         else:
             st.write("Failed to classify the image")
             st.write(f"Server responded with error: {response.status_code} - {response.text}")
