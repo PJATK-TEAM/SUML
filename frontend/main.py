@@ -13,7 +13,7 @@ selected2 = option_menu(None, ["Home", "Upload", "History", 'Settings'],
 if selected2 == "Home":
     try:
         with st.spinner("Connecting to backend..."):
-            response = requests.get("http://127.0.0.1:8000/")
+            response = requests.get("http://backend:8000/")
 
         if response.status_code == 200:
             st.markdown("## 🔍 Bird vs Drone Classifier")
@@ -54,7 +54,7 @@ elif selected2 == "Upload":
         with st.spinner("Classifying..."):
             try:
                 files = {"file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
-                response = requests.post("http://127.0.0.1:8000/classify", files=files)
+                response = requests.post("http://backend:8000/classify", files=files)
 
                 if response.status_code == 200:
                     result = response.json()
@@ -89,7 +89,7 @@ elif selected2 == "Upload":
 
 # History
 elif selected2 == "History":
-    response = requests.get("http://127.0.0.1:8000/history")
+    response = requests.get("http://backend:8000/history")
     if response.status_code == 200:
         history = response.json()
         for item in history:
@@ -100,7 +100,7 @@ elif selected2 == "History":
 
 # Settings
 elif selected2 == "Settings":
-    response = requests.get("http://127.0.0.1:8000/settings")
+    response = requests.get("http://backend:8000/settings")
     if response.status_code == 200:
         settings = response.json()
         for item in settings:

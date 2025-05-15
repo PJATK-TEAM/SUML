@@ -58,7 +58,7 @@ dependencies:
   - typing-extensions=4.12.2
   - typing_extensions=4.12.2
   - tzdata=2025a
-  - uvicorn-standard=0.34.2
+  - uvicorn=0.23.2
   - uvloop=0.21.0
   - wheel=0.45.1
   - xz=5.8.1

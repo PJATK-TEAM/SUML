@@ -9,7 +9,7 @@ import io
 app = FastAPI(title="Bird Drone Classifier API", version="1.0.0")
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
-model = tf.keras.models.load_model("backend/bird_vs_drone_model.h5")
+model = tf.keras.models.load_model("bird_vs_drone_model.h5")
 class_names = ['Bird', 'Drone']
 
 
