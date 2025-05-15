@@ -1,28 +1,35 @@
 Hi, here are the steps to run the app
 1. Clone the repository
 2. Navigate to the project directory
-3. Install conda if you haven't already
-4. To create a conda environment for **backend** with the required dependencies from file run:
+3. Application uses Docker containers, to start run:
+   
+  `docker compose up`
+
+The application works on port 8501
+
+Steps without Docker:
+1. Install conda if you haven't already
+2. To create a conda environment for **backend** with the required dependencies from file run:
 
     `conda env create -f backend/environment.yml`
 
-5. Activate the conda environment with:
+3. Activate the conda environment with:
 
     `conda activate bird-drone-classifier-env`
 
-6. To start the app, run:
+4. To start the app, run:
 
     `fastapi dev backend/main.py`
 
-7. To create a conda environment for **frontend** with the required dependencies from file run:
+5. To create a conda environment for **frontend** with the required dependencies from file run:
 
     `conda env create -f frontend/environment.yml`
 
-8. Activate the conda environment with:
+6. Activate the conda environment with:
 
     `conda activate bird-drone-classifier-front`
 
-9. To start the app, run:
+7. To start the app, run:
 
     `streamlit run frontend/main.py`
 
