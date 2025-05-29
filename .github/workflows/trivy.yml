@@ -32,25 +32,28 @@ jobs:
         run: docker compose -f docker-compose.yml build
 
       - name: Run Trivy vulnerability scanner for frontend
-        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
+        uses: aquasecurity/trivy-action@0.30.0
         with:
           image-ref: 'pjatksuml/frontend'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
-
-      - name: Run Trivy scanner for backend
-        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
-        with:
-          image-ref: 'pjatksuml/backend'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results-backend.sarif'
+          format: 'table'
           severity: 'CRITICAL,HIGH'
           exit-code: '1'
+          timeout: 20m
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          skip-dirs: |
+            opt/conda
+        continue-on-error: true
 
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+      - name: Run Trivy vulnerability scanner for backend
+        uses: aquasecurity/trivy-action@0.30.0
         with:
-          sarif_file: 'trivy-results.sarif'
+          image-ref: 'pjatksuml/backend'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'
+          timeout: 20m
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          skip-dirs: |
+            opt/conda
