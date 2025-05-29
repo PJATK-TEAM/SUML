@@ -17,5 +17,8 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USER }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build & push via docker compose
-      run: docker compose -f docker-compose.yml build --push
+    - name: Build images
+      run: docker compose -f docker-compose.yml build
+
+    - name: Push images
+      run: docker compose -f docker-compose.yml push
