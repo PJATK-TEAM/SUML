@@ -35,25 +35,30 @@ jobs:
         uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
         with:
           image-ref: 'pjatksuml/frontend'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results.sarif'
+          format: 'sarif'
+          output: 'trivy-results-frontend.sarif'
           severity: 'CRITICAL,HIGH'
+          exit-code: '1'
           timeout: 20m
+          security-checks: 'vuln'
 
-      - name: Run Trivy scanner for backend
+      - name: Run Trivy vulnerability scanner for backend
         uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
         with:
           image-ref: 'pjatksuml/backend'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
+          format: 'sarif'
           output: 'trivy-results-backend.sarif'
           severity: 'CRITICAL,HIGH'
           exit-code: '1'
           timeout: 20m
+          security-checks: 'vuln'
 
-      - name: Upload Trivy scan results to GitHub Security tab
+      - name: Upload Trivy scan results for frontend
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: 'trivy-results-frontend.sarif'
 
+      - name: Upload Trivy scan results for backend
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results-backend.sarif'
