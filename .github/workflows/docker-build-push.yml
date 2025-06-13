@@ -30,6 +30,6 @@ jobs:
     - name: Deploy to Azure Container App
       uses: azure/container-apps-deploy-action@v2
       with:
-        resource-group: suml
-        app-name: bird-drone-frontend
-        image: birddrone.azurecr.io/pjatksuml/frontend:latest
+        resourceGroup: suml
+        containerAppName: bird-drone-frontend
+        imageToDeploy: birddrone.azurecr.io/pjatksuml/frontend:latest
