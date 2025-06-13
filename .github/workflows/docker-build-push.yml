@@ -1,37 +1,33 @@
-name: Build and Deploy to Azure Container Apps
+name: Build and Push to Azure Container Registry
 
 on:
   push:
     branches:
-      - main
-  workflow_dispatch:
+      - main  # lub master, jak masz
 
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
 
-    - name: Login to Azure
+    - name: Login to Azure CLI
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Build and push image to ACR
+    - name: Build and push frontend image
       uses: docker/build-push-action@v4
       with:
-        context: .
+        context: ./frontend
         push: true
-        tags: birddrone.azurecr.io/birddrone:${{ github.sha }}
+        tags: birddrone.azurecr.io/pjatksuml/frontend:latest
 
-    - name: Deploy to Azure Container Apps
-      uses: azure/azure-container-apps-deploy@v1
+    - name: Build and push backend image
+      uses: docker/build-push-action@v4
       with:
-        app-name: bird-drone
-        resource-group: SUML
-        image: birddrone.azurecr.io/birddrone:${{ github.sha }}
-        registry-server: birddrone.azurecr.io
-        registry-username: ${{ secrets.ACR_USERNAME }}
-        registry-password: ${{ secrets.ACR_PASSWORD }}
+        context: ./backend
+        push: true
+        tags: birddrone.azurecr.io/pjatksuml/backend:latest
