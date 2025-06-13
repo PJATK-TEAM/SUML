@@ -1,4 +1,4 @@
-name: Build, Push and Deploy to Azure Container Apps
+name: Build and deploy to Azure Container App
 
 on:
   push:
@@ -6,48 +6,30 @@ on:
       - main
 
 jobs:
-  build-push-deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
+    - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Login to Azure CLI
+    - name: Login to Azure using AZURE_CREDENTIALS
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Build and push frontend image
-      uses: docker/build-push-action@v4
-      with:
-        context: ./frontend
-        push: true
-        tags: birddrone.azurecr.io/pjatksuml/frontend:latest
+    - name: Docker login to ACR
+      run: |
+        az acr login --name birddrone
 
-    - name: Build and push backend image
-      uses: docker/build-push-action@v4
-      with:
-        context: ./backend
-        push: true
-        tags: birddrone.azurecr.io/pjatksuml/backend:latest
+    - name: Build and push image
+      run: |
+        docker build -t birddrone.azurecr.io/pjatksuml/frontend:latest ./frontend
+        docker push birddrone.azurecr.io/pjatksuml/frontend:latest
 
-    - name: Deploy frontend to Azure Container Apps
-      uses: azure/azure-container-apps-deploy@v1
+    - name: Deploy to Azure Container App
+      uses: azure/container-apps-deploy-action@v2
       with:
+        resource-group: suml
         app-name: bird-drone-frontend
-        resource-group: suml
         image: birddrone.azurecr.io/pjatksuml/frontend:latest
-        registry-server: birddrone.azurecr.io
-        registry-username: ${{ secrets.ACR_USERNAME }}
-        registry-password: ${{ secrets.ACR_PASSWORD }}
-
-    - name: Deploy backend to Azure Container Apps
-      uses: azure/azure-container-apps-deploy@v1
-      with:
-        app-name: bird-drone-backend
-        resource-group: suml
-        image: birddrone.azurecr.io/pjatksuml/backend:latest
-        registry-server: birddrone.azurecr.io
-        registry-username: ${{ secrets.ACR_USERNAME }}
-        registry-password: ${{ secrets.ACR_PASSWORD }}
