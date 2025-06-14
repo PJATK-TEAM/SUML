@@ -92,11 +92,26 @@ elif selected2 == "History":
     response = requests.get("http://backend:8000/history")
     if response.status_code == 200:
         history = response.json()
-        for item in history:
-            st.write(f"File: {item['file_name']}, Result: {item['result']}")
-    else:
-        # st.write("Failed to fetch history")
-        st.write("Sorry, the feature hasn't been implemented yet.")
+        st.markdown("## 🕓 Prediction History")
+
+        if not history:
+            st.info("No classification history found.")
+        else:
+            for item in history:
+                file_name = item["file_name"]
+                timestamp = item["timestamp"]
+                result = item["result"]
+
+                bird = result.get("Bird", 0)
+                drone = result.get("Drone", 0)
+
+                st.markdown(f"**🗂 File:** {file_name}")
+                st.markdown(f"🕒 {timestamp}")
+                st.progress(bird)
+                st.markdown(f"🐦 **Bird**: {bird * 100:.2f}%")
+                st.progress(drone)
+                st.markdown(f"🛸 **Drone**: {drone * 100:.2f}%")
+                st.markdown("---")
 
 # Settings
 elif selected2 == "Settings":

@@ -408,3 +408,6 @@ training/data_split
 # ingore MacOS .DS_Store files
 training/.DS_Store
 .DS_Store
+
+#ignore .env files
+.env
